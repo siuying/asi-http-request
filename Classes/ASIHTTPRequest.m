@@ -2064,8 +2064,8 @@ static NSOperationQueue *sharedQueue = nil;
 		#endif
 		[[self connectionInfo] removeObjectForKey:@"request"];
 		[persistentConnectionsPool removeObject:[self connectionInfo]];
-		[connectionsLock unlock];
 		[self destroyReadStream];
+		[connectionsLock unlock];
 	}
 	if ([self connectionCanBeReused]) {
 		[[self connectionInfo] setObject:[NSDate dateWithTimeIntervalSinceNow:[self persistentConnectionTimeoutSeconds]] forKey:@"expires"];
@@ -3476,12 +3476,11 @@ static NSOperationQueue *sharedQueue = nil;
 	#endif
 	[[self connectionInfo] removeObjectForKey:@"request"];
 	[[self connectionInfo] setObject:[NSDate dateWithTimeIntervalSinceNow:[self persistentConnectionTimeoutSeconds]] forKey:@"expires"];
-	[connectionsLock unlock];
-	
 	if (![self authenticationNeeded]) {
 		[self destroyReadStream];
 	}
-	
+	[connectionsLock unlock];
+
 
 	if (![self needsRedirect] && ![self authenticationNeeded] && ![self didUseCachedResponse]) {
 		
